@@ -75,6 +75,7 @@
     <Compile Include="Common\IMetriable.cs" />
     <Compile Include="Common\ExceptionReport.cs" />
     <Compile Include="ITypeNickable.cs" />
+    <Compile Include="L.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\CommonClassHelper.cs" />

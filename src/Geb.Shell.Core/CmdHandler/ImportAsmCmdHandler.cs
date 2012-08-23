@@ -16,16 +16,17 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
             if (Args != null && Args.Count == 1)
             {
                   String path =  Args[0].Trim();
-                  ImportAsm(path); ;
+                  return ImportAsm(path); ;
             }
+            return String.Empty;
         }
 
-        public void ImportAsm(String path)
+        public String ImportAsm(String path)
         {
             Assembly a;
             if (Mark != null && Mark.Contains('f'))
@@ -34,8 +35,21 @@ namespace Geb.Shell.Core.CmdHandler
             }
             else
             {
-                a = Assembly.LoadWithPartialName(path);
+                a = Assembly.Load(path);
+                if (a == null)
+                {
+                    a = Assembly.LoadFile(System.IO.Path.GetFullPath(path));
+                }
+            }
+
+            if (a == null)
+            {
+                return path + " not found.";
+            }
+            else
+            {
                 Context.ImportAsm(a);
+                return path + " imported.";
             }
         }
 

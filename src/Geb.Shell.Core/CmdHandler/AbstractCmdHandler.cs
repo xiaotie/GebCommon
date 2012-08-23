@@ -30,20 +30,22 @@ namespace Geb.Shell.Core.CmdHandler
             Args = args;
         }
 
-        public void ListClass(String match)
+        public String ListClass(String match)
         {
-            Console.WriteLine(Context.TypeManager.Now.FullName);
-            Console.WriteLine(Context.ConsoleLine);
-            Context.TypeManager.Now.ListDir(match);
-            Context.TypeManager.Now.ListType(match);
-            Console.WriteLine(Context.ConsoleLine);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(Context.TypeManager.Now.FullName);
+            sb.AppendLine(Context.ConsoleLine);
+            sb.AppendLine(Context.TypeManager.Now.ListDir(match));
+            sb.AppendLine(Context.TypeManager.Now.ListType(match));
+            sb.AppendLine(Context.ConsoleLine);
+            return sb.ToString();
         }
 
-        public void ShowLocation()
+        public String ShowLocation()
         {
-            Console.WriteLine("Location: " + Context.TypeManager.Now.FullName);
+            return ("Location: " + Context.TypeManager.Now.FullName);
         }
 
-        public abstract void Run();
+        public abstract String Run();
     }
 }

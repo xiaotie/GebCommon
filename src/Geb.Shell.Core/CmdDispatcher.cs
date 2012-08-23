@@ -53,10 +53,10 @@ namespace Geb.Shell.Core
             return AppDomain.CurrentDomain.Load(filePath);
         }
 
-        public void Dispatch()
+        public String Dispatch()
         {
             String[] results = InputCmdString.Split(SPLITS, StringSplitOptions.None);
-            if(results.Length == 0) return;
+            if(results.Length == 0) return String.Empty;
 
             String cmd = results[0];
             String mark = String.Empty;
@@ -87,49 +87,51 @@ namespace Geb.Shell.Core
                 {
                     case "debug":   // 开启debug开关
                         Context.Debug = true;
+                        return "Debug opened";
                         break;
                     case "undebug": // 关闭debug开关
                         Context.Debug = false;
+                        return "Debug closed";
                         break;
                     case "help":
-                        Context.PrintHelp();
+                        return Context.PrintHelp();
                         break;
                     case "asms":    // 列出加载的程序集
-                        Context.ListAsms();
+                        return Context.ListAsms();
                         break;
                     case "cd":
                         if(!String.IsNullOrEmpty(argString))
                             FileSystem.ChDir(Path.GetFullPath(argString));
                         break;
                     case "ls":      // Unix下的ls命令
-                        Context.ExecuteDosCmd("dir " + mark + argString);
+                        return Context.ExecuteDosCmd("dir " + mark + argString);
                         break;
                     case "dir":
                     case "grep":
                     case "ping":
-                        Context.ExecuteDosCmd(InputCmdString);
+                        return Context.ExecuteDosCmd(InputCmdString);
                         break;
                     case "import":  // 导入程序集
-                        new ImportAsmCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new ImportAsmCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "use":     // 引入命名空间
-                        new UseNamespaceCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new UseNamespaceCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "unuse":   // 移除引入的命名空间
-                        new RemoveNamespaceCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new RemoveNamespaceCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "cdc":     // 改变命名空间
-                        new CdClassCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new CdClassCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "lsc":     // 列出命名空间的内容
                     case "dirc":
-                        new ListClassCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new ListClassCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "my":      // 列出用户变量
-                        new ListInstanceCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new ListInstanceCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     case "alias":   // 列出alias列表
-                        new ListAliasCmdHandler(Context, InputCmdString, mark, args).Run();
+                        return new ListAliasCmdHandler(Context, InputCmdString, mark, args).Run();
                         break;
                     default:
                         String fullCmd = Context.GetFullCmd(cmd);
@@ -144,16 +146,16 @@ namespace Geb.Shell.Core
                                 }
                             }
 
-                            Context.Invoke(fullCmd);
+                            return Context.Invoke(fullCmd);
                         }
                         else                   // 编译代码并运行
                         {
-                            new CscCmdHandler(Context, InputCmdString).Run();
+                            return new CscCmdHandler(Context, InputCmdString).Run();
                         }
                         break;
                 }
 
-            return;
+            return String.Empty;
         }
     }
 }

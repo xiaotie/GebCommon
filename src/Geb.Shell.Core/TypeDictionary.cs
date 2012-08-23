@@ -21,7 +21,7 @@ namespace Geb.Shell.Core
 
         public SortedDictionary<String, Type> Types { get; set; }
 
-        public void ListType(String match)
+        public String ListType(String match)
         {
             Regex re = null;
 
@@ -30,6 +30,7 @@ namespace Geb.Shell.Core
                 re = new Regex(match);
             }
 
+            StringBuilder sb = new StringBuilder();
             foreach (Type t in Types.Values)
             {
                 String name = t.Name;
@@ -47,11 +48,12 @@ namespace Geb.Shell.Core
                     else typeClass += "S";
                 }
 
-                Console.WriteLine(typeClass + ":\t" + Context.EnsureAtLeastLength(name,20) + "\t" + t.FullName);
+                sb.AppendLine(typeClass + ":\t" + Context.EnsureAtLeastLength(name, 20) + "\t" + t.FullName);
             }
+            return sb.ToString();
         }
 
-        public void ListDir(String match)
+        public String ListDir(String match)
         {
             Regex re = null;
 
@@ -60,6 +62,7 @@ namespace Geb.Shell.Core
                 re = new Regex(match);
             }
 
+            StringBuilder sb = new StringBuilder();
             foreach (TypeDictionary dic in SubTypeDictionary.Values)
             {
                 String name = dic.Name;
@@ -67,8 +70,9 @@ namespace Geb.Shell.Core
                 {
                     if (!re.IsMatch(name)) continue;
                 }
-                Console.WriteLine("N:\t" + Context.EnsureAtLeastLength(name, 20) + "\t" + dic.FullName);
+                sb.AppendLine("N:\t" + Context.EnsureAtLeastLength(name, 20) + "\t" + dic.FullName);
             }
+            return sb.ToString();
         }
 
         public TypeDictionary(String name)

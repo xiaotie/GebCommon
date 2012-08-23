@@ -25,6 +25,10 @@ namespace Geb.Utils.WinForm
         private void FrmImageBox_Load(object sender, EventArgs e)
         {
             this.pbMain.Image = Image;
+            if (Image != null)
+            {
+                this.lbSize.Text = String.Format("({0},{1})", Image.Width, Image.Height);
+            }
         }
     }
 }

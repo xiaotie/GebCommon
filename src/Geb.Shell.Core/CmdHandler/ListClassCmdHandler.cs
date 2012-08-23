@@ -21,7 +21,7 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
             String match = null;
 
@@ -30,7 +30,7 @@ namespace Geb.Shell.Core.CmdHandler
                 match = Args[0].Trim();
             }
 
-            ListClass(match);
+            return ListClass(match);
         }
     }
 }

@@ -162,7 +162,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Geb.Utils\Geb.Utils.csproj">
       <Project>{9771C724-359F-46FE-8FD0-7896353537AF}</Project>
-      <Name>Orc.Util</Name>
+      <Name>Geb.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

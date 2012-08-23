@@ -15,7 +15,7 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
             if (Args == null || Args.Count == 0)
             {
@@ -28,9 +28,11 @@ namespace Geb.Shell.Core.CmdHandler
                 if (!String.IsNullOrEmpty(ns))
                 {
                     Context.AddNamespace(ns);
-                    Context.ListNamespace();
+                    return Context.ListNamespace();
                 }
             }
+
+            return String.Empty;
         }
     }
 
@@ -41,7 +43,7 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
             if (Args != null && Args.Count == 1)
             {
@@ -50,9 +52,10 @@ namespace Geb.Shell.Core.CmdHandler
                 if (!String.IsNullOrEmpty(ns))
                 {
                     Context.RemoveNamespace(ns);
-                    Context.ListNamespace();
+                    return Context.ListNamespace();
                 }
             }
+            return Environment.NewLine;
         }
     }
 }

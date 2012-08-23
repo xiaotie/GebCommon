@@ -21,9 +21,9 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
-            Context.ListInstances();
+            return Context.ListInstances();
         }
     }
 

@@ -21,7 +21,7 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
             String match = null;
 
@@ -32,14 +32,13 @@ namespace Geb.Shell.Core.CmdHandler
 
             if (String.IsNullOrEmpty(match) || match.Equals("."))
             {
-                ShowLocation();
-                return;
+                return ShowLocation();
             }
 
             if (match.Equals(".."))
             {
                 Context.TypeManager.StepUp();
-                ShowLocation();
+                return ShowLocation();
             }
             else
             {
@@ -52,8 +51,7 @@ namespace Geb.Shell.Core.CmdHandler
                     {
                         matchDic = td;
                         Context.TypeManager.StepDown(match);
-                        ShowLocation();
-                        return;
+                        return ShowLocation();
                     }
 
                     if (td.Name.StartsWith(match))
@@ -64,20 +62,21 @@ namespace Geb.Shell.Core.CmdHandler
 
                 if (matchList.Count == 0)
                 {
-                    Console.WriteLine("指定的命名空间不存在.");
+                    return "指定的命名空间不存在.";
                 }
                 else if (matchList.Count == 1)  // 当只有1个匹配项时，则进入该匹配项
                 {
                     Context.TypeManager.StepDown(matchList[0].Name);
-                    ShowLocation();
-                    return;
+                    return ShowLocation();
                 }
                 else // 超过1个匹配项时，保留在当前命名空间，同时打印全部匹配项
                 {
+                    StringBuilder sb = new StringBuilder();
                     foreach (TypeDictionary td in matchList)
                     {
-                        Console.WriteLine(Context.EnsureAtLeastLength(td.Name, 24));
+                        sb.AppendLine(Context.EnsureAtLeastLength(td.Name, 24));
                     }
+                    return sb.ToString();
                 }
             }
         }

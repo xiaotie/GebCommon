@@ -86,7 +86,7 @@ namespace Geb.Shell.Core
             InitNamespaces();
             InitHelpDoc();
 
-            ConsoleLine = CreateConsoleWidthLine();
+            ConsoleLine = String.Empty;
 
             Assembly[] al = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly a in al)
@@ -136,7 +136,10 @@ namespace Geb.Shell.Core
         {
             if (a != null)
             {
-                Assemblys.Add(a.FullName, a);
+                if (a.FullName.StartsWith("mscorlib") == false)
+                {
+                    Assemblys.Add(a.FullName, a);
+                }
 
                 Type[] tl = a.GetTypes();
 
@@ -158,22 +161,22 @@ namespace Geb.Shell.Core
             }
         }
 
-        public void Invoke(String cmd)
+        public String Invoke(String cmd)
         {
             try
             {
                 CmdDispatcher pt = new CmdDispatcher(this, cmd);
-                pt.Dispatch();
+                return pt.Dispatch();
             }
             catch (Exception e)
             {
                 if (Debug)
                 {
-                    Console.WriteLine(e.ToString());
+                    return e.ToString();
                 }
                 else
                 {
-                    Console.WriteLine(e.Message);
+                    return e.Message;
                 }
             }
         }
@@ -183,20 +186,24 @@ namespace Geb.Shell.Core
             this[argName] = arg;
         }
 
-        public void ListInstances()
+        public String ListInstances()
         {
+            StringBuilder sb = new StringBuilder();
             foreach (String key in Instances.Keys)
             {
-                Console.WriteLine(key + "\t" + Instances[key]);
+                sb.AppendLine(key + "\t" + Instances[key]);
             }
+            return sb.ToString();
         }
 
-        public void ListAlias()
+        public String ListAlias()
         {
+            StringBuilder sb = new StringBuilder();
             foreach (String sc in AliasCmds.Keys)
             {
-                Console.WriteLine(sc + "\t" + AliasCmds[sc]);
+                sb.AppendLine(sc + "\t" + AliasCmds[sc]);
             }
+            return sb.ToString();
         }
 
         public String GetFullCmd(String shortCmd)
@@ -224,14 +231,16 @@ namespace Geb.Shell.Core
             }
         }
 
-        public void ListNamespace()
+        public String ListNamespace()
         {
-            Console.WriteLine("Namespaces using:");
-            Console.WriteLine(ConsoleLine);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Namespaces using:");
+            sb.AppendLine(ConsoleLine);
             foreach (String s in Namespaces.Keys)
             {
-                Console.WriteLine(s);
+                sb.AppendLine(s);
             }
+            return sb.ToString();
         }
 
         public void InitNamespaces()
@@ -240,7 +249,7 @@ namespace Geb.Shell.Core
             AddNamespace("System.IO");
             AddNamespace("System.Text");
             AddNamespace("System.Collections.Generic");
-            AddNamespace("Orc.Shell.Core");
+            AddNamespace("Geb.Shell.Core");
         }
 
         public static String CreateConsoleWidthLine()
@@ -266,10 +275,10 @@ namespace Geb.Shell.Core
             }
         }
 
-        public void PrintHelp()
+        public String PrintHelp()
         {
-            if (HelpDoc == null) return;
-
+            if (HelpDoc == null) return String.Empty;
+            StringBuilder sb = new StringBuilder();
             XmlDocument doc = HelpDoc;
             XmlNodeList xnl = doc["cmds"].ChildNodes;
             if (xnl != null)
@@ -280,10 +289,11 @@ namespace Geb.Shell.Core
                     {
                         String cmd = n.Attributes["name"].Value;
                         String note = n.InnerText;
-                        Console.WriteLine(cmd + "\t" + note);
+                        sb.AppendLine(cmd + "\t" + note);
                     }
                 }
             }
+            return sb.ToString();
         }
 
         public void ImportAsm(Assembly asm)
@@ -291,24 +301,26 @@ namespace Geb.Shell.Core
             AppDomain.CurrentDomain.Load(asm.GetName());
         }
 
-        public void ListAsms()
+        public String ListAsms()
         {
+            StringBuilder sb = new StringBuilder();
             if (Assemblys != null)
             {
-                Console.WriteLine("Assemblys Loaded:");
-                Console.WriteLine(ConsoleLine);
+                sb.AppendLine("Assemblys Loaded:");
+                sb.AppendLine(ConsoleLine);
                 foreach (Assembly a in Assemblys.Values)
                 {
-                    Console.WriteLine(a.FullName);
+                    sb.AppendLine(a.FullName);
                 }
             }
+            return sb.ToString();
         }
 
         /// <summary>
         /// 执行 doc 命令
         /// </summary>
         /// <param name="dosCommand"> doc 指令 </param>
-        public void ExecuteDosCmd(String dosCommand)
+        public String ExecuteDosCmd(String dosCommand)
         {
             string output = "";     //输出字符串
             if (!String.IsNullOrEmpty(dosCommand))
@@ -328,10 +340,11 @@ namespace Geb.Shell.Core
                     process.Start();
                     process.BeginOutputReadLine();
                     process.WaitForExit();
+                    return FetchCacheOutputs();
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine(e);
+                    return e.ToString();
                 }
                 finally
                 {
@@ -339,13 +352,33 @@ namespace Geb.Shell.Core
                         process.Close();
                 }
             }
+            return String.Empty;
+        }
+
+        private List<String> CacheOutputs = new List<String>();
+
+        private String FetchCacheOutputs()
+        {
+            StringBuilder sb = new StringBuilder();
+            lock (this)
+            {
+                foreach (String item in CacheOutputs)
+                {
+                    sb.AppendLine(item);
+                }
+                CacheOutputs.Clear();
+            }
+            return sb.ToString();
         }
 
         void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
-                Console.WriteLine(e.Data);
+                lock (this)
+                {
+                    CacheOutputs.Add(e.Data);
+                }
             }
         }
 

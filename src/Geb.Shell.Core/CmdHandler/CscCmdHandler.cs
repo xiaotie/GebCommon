@@ -50,9 +50,11 @@ namespace Geb.Shell.Core.CmdHandler
         {
         }
 
-        public override void Run()
+        public override String Run()
         {
-            if (String.IsNullOrEmpty(InputCmdString)) return;
+            if (String.IsNullOrEmpty(InputCmdString)) return String.Empty;
+
+            StringBuilder sb = new StringBuilder();
 
             String inputCmdString = InputCmdString.Trim();
             Regex re;
@@ -92,7 +94,7 @@ namespace Geb.Shell.Core.CmdHandler
                                 Object obj = Context[outArgName];
                                 if (obj == null) throw new Exception("不存在环境变量" + outArgName);
 
-                                String innerArgName = String.Format(@"(new Orc.Shell.Core.CmdHandler.ObjectHelper<{0}>(Context,""{1}"")).Obj", obj.GetType(), outArgName);
+                                String innerArgName = String.Format(@"(new Geb.Shell.Core.CmdHandler.ObjectHelper<{0}>(Context,""{1}"")).Obj", obj.GetType(), outArgName);
                                 ArgsList.Add(outArgName, innerArgName);
                             }
                         }
@@ -137,45 +139,48 @@ namespace Geb.Shell.Core.CmdHandler
 
                 if (cr.Errors.HasErrors)
                 {
-                    Console.WriteLine("编译错误：");
-                    OutputCode(inputCmdString);
+                    sb.AppendLine("编译错误：");
+                    sb.AppendLine(OutputCode(inputCmdString));
                     foreach (CompilerError err in cr.Errors)
                     {
                         Console.WriteLine(err.ErrorNumber);
 
                         if (Context.Debug)
                         {
-                            Console.WriteLine(String.Format("line {0}: {1}", err.Line, err.ErrorText));
+                            sb.AppendLine(String.Format("line {0}: {1}", err.Line, err.ErrorText));
                         }
                         else
                         {
-                            Console.WriteLine(err.ErrorText);
+                            sb.AppendLine(err.ErrorText);
                         }
                     }
 
-                    return;
+                    return sb.ToString();
                 }
             }
 
             if (Context.Debug)
             {
-                OutputCode(inputCmdString);
+                sb.AppendLine(inputCmdString);
             }
 
             Assembly assem = cr.CompiledAssembly;
-            Object dynamicObject = assem.CreateInstance("Orc.Shell.Core.Dynamic.DynamicClass");
-            Type t = assem.GetType("Orc.Shell.Core.Dynamic.DynamicClass");
+            Object dynamicObject = assem.CreateInstance("Geb.Shell.Core.Dynamic.DynamicClass");
+            Type t = assem.GetType("Geb.Shell.Core.Dynamic.DynamicClass");
             MethodInfo minfo = t.GetMethod("MethodInstance");
             minfo.Invoke(dynamicObject, new Object[] { Context });
+
+            return sb.ToString();
         }
 
-        private void OutputCode(String text)
+        private String OutputCode(String text)
         {
             String line = Context.ConsoleLine;
-
-            Console.WriteLine(line);
-            Console.WriteLine(text);
-            Console.WriteLine(line);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(line);
+            sb.AppendLine(text);
+            sb.AppendLine(line);
+            return sb.ToString();
         }
 
         private String BuildFullCmd(String inputCmdString)
@@ -198,11 +203,11 @@ namespace Geb.Shell.Core.CmdHandler
 
 
             fullCmd += @"
-                namespace Orc.Shell.Core.Dynamic 
+                namespace Geb.Shell.Core.Dynamic 
                 { 
                     public class DynamicClass
                     {
-                        public Orc.Shell.Core.Context Context;
+                        public Geb.Shell.Core.Context Context;
 
                         public void Save(String name, Object obj)
                         {
