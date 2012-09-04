@@ -74,6 +74,7 @@
     <Compile Include="Common\Compress.cs" />
     <Compile Include="Common\IMetriable.cs" />
     <Compile Include="Common\ExceptionReport.cs" />
+    <Compile Include="Common\MathHelper.cs" />
     <Compile Include="ITypeNickable.cs" />
     <Compile Include="L.cs" />
     <Compile Include="Tuple.cs" />
