@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.XPath;
 
 namespace Geb.Utils.Csmacro
 {
@@ -33,6 +35,7 @@ namespace Geb.Utils.Csmacro
             }
 
             String filePath = args[0];
+            //String filePath = "E:\\MyWorkspace\\DotNetWorkspace\\00_Public_Geb.Common\\src\\Geb.Utils\\";
 
             Path.GetDirectoryName(filePath);
             String dirName = Path.GetDirectoryName(filePath);
@@ -69,11 +72,49 @@ namespace Geb.Utils.Csmacro
 
         static void Csmacro(DirectoryInfo di)
         {
+            ParsePrjFile(di);
+
             Console.WriteLine("[Csmacro]:进入目录" + di.FullName);
 
             foreach (FileInfo fi in di.GetFiles("*.cs", SearchOption.AllDirectories))
             {
                 Csmacro(fi);
+            }
+        }
+
+        static void ParsePrjFile(DirectoryInfo di)
+        {
+            FileInfo[] files = di.GetFiles("*.csproj");
+            if (files != null && files.Length > 0)
+            {
+                FileInfo fi = files[0];
+                Console.WriteLine("[Csmacro]:解析项目文件" + fi.FullName);
+                String txt = File.ReadAllText(fi.FullName);
+                if (txt.Contains("xmlns"))
+                {
+                    txt = txt.Replace("xmlns:", "xmlns_");
+                    txt = txt.Replace("xmlns", "xmlns_");
+                }
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(txt);
+                XmlNode node = doc.SelectSingleNode("//TargetFrameworkVersion");
+                if (node != null)
+                {
+                    String word = node.InnerText.Trim();
+                    Console.WriteLine("[Csmacro]:.Net版本号" + word);
+                    StringBuilder sb = new StringBuilder();
+                    switch (word)
+                    {
+                        case "v2.0":
+                            sb.AppendLine("#define NET2");
+                            break;
+                        case "v4.0":
+                            sb.AppendLine("#define NET4");
+                            break;
+                    }
+                    String path = di.FullName + "\\Csmacro_Template.cs";
+                    File.WriteAllText(path, sb.ToString());
+                }
             }
         }
 
@@ -161,7 +202,7 @@ namespace Geb.Utils.Csmacro
             {
                 return m.Value;
             }
-            else return String.Empty;
+            else return txt;
         }
 
         static void PrintHelp()

@@ -74,9 +74,13 @@
     <Compile Include="Common\Compress.cs" />
     <Compile Include="Common\IMetriable.cs" />
     <Compile Include="Common\ExceptionReport.cs" />
-    <Compile Include="Common\MathHelper.cs" />
+    <Compile Include="Common\MathClassHelper.cs" />
+    <Compile Include="Csmacro_Template.cs" />
     <Compile Include="ITypeNickable.cs" />
     <Compile Include="L.cs" />
+    <Compile Include="Patch.cs" />
+    <Compile Include="Patch_Csmacro.cs" />
+    <Compile Include="Text\StringHelper.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\CommonClassHelper.cs" />
@@ -126,6 +130,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>Csmacro.exe $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

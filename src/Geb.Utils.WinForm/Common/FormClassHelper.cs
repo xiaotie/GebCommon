@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text;
-using System.Linq;
 
 namespace Geb.Utils.WinForm
 {
@@ -204,6 +203,20 @@ namespace Geb.Utils.WinForm
         public static void OpenImageFile(this Form element, Action<String> callbackOnFilePath, String filter = "图像文件|*.bmp;*.jpg;*.gif;*.png")
         {
             OpenFile(element, callbackOnFilePath, filter);
+        }
+
+        public static void OpenDir(this Form element, Action<String> callbackOnDirPath)
+        {
+            String dirPath;
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                if (callbackOnDirPath != null)
+                {
+                    dirPath = dlg.SelectedPath;
+                    callbackOnDirPath(dirPath);
+                }
+            }
         }
 
 	}

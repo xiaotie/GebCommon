@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Geb.Utils
@@ -10,6 +9,8 @@ namespace Geb.Utils
     /// </summary>
     public static class MathHelper
     {
+        #region Max 扩展方法
+
         public static Byte Max(this Byte val1, Byte val2)
         {
             return Math.Max(val1, val2);
@@ -40,6 +41,10 @@ namespace Geb.Utils
             return Math.Max(val1, val2);
         }
 
+        #endregion
+
+        #region Min 扩展方法
+
         public static Byte Min(this Byte val1, Byte val2)
         {
             return Math.Min(val1, val2);
@@ -68,6 +73,8 @@ namespace Geb.Utils
         public static Double Min(this Double val1, Double val2)
         {
             return Math.Min(val1, val2);
-        }
+        } 
+
+        #endregion
     }
 }
