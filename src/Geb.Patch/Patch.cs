@@ -1,5 +1,5 @@
-﻿#region include "Csmacro_Template.cs"
-#endregion
+﻿#define NET2
+
 
 #if NET2
 
@@ -11,7 +11,7 @@ namespace System.Runtime.CompilerServices
 namespace System
 {
     public delegate void Action();
-    public delegate void Action<T0,T1>(T0 t0,T1 t1);
+    public delegate void Action<T0, T1>(T0 t0, T1 t1);
 }
 
 #endif
