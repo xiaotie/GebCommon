@@ -78,7 +78,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Geb.Shell.Core\Gen.Shell.Core.csproj">
       <Project>{636B1ED6-22DA-4BC6-BB68-AD2383481AAC}</Project>
-      <Name>Orc.Shell.Core</Name>
+      <Name>Gen.Shell.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

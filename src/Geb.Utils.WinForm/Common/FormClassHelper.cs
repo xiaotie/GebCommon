@@ -60,6 +60,16 @@ namespace Geb.Utils.WinForm
 		}
 	}
 
+    public static class PictureBoxClassHelper
+    {
+        public static void ShowImage(this PictureBox box, System.Drawing.Image image, Boolean disposeOld = true)
+        {
+            System.Drawing.Image old = box.Image;
+            box.Image = image;
+            if (disposeOld == true && old != null) old.Dispose();
+        }
+    }
+
 	public static class FormClassHelper
 	{
 
