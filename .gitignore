@@ -7,3 +7,4 @@ Release
 /bin
 /Geb.Common.v11.suo
 *.suo
+/TestResults

@@ -209,6 +209,95 @@ namespace Geb.Numerics
             return m;
         }
 
+
+        #region 操作符重载
+
+        public unsafe static Matrix operator +( Matrix m1, Matrix m2)
+        {
+            if (m1.Length != m2.Length) throw new ArgumentException("m1 and m2 must be same size");
+
+            Matrix m = m2.Clone();
+            double* p = m.Data;
+            double* pEnd = p + m.Length;
+            double* p1 = m1.Data;
+            while (p != pEnd)
+            {
+                *p = *p + *p1;
+                p++; p1++;
+            }
+            return m;
+        }
+
+        public unsafe static Matrix operator -(Matrix m1, Matrix m2)
+        {
+            if (m1.Length != m2.Length) throw new ArgumentException("m1 and m2 must be same size");
+
+            Matrix m = m2.Clone();
+            double* p = m.Data;
+            double* pEnd = p + m.Length;
+            double* p1 = m1.Data;
+            while (p != pEnd)
+            {
+                *p = *p1 - *p;
+                p++; p1++;
+            }
+            return m;
+        }
+
+        public unsafe static Matrix operator -(Matrix m1)
+        {
+            Matrix m = m1.Clone();
+            double* p = m.Data;
+            double* pEnd = p + m.Length;
+            while (p != pEnd)
+            {
+                *p = -*p;
+                p++; 
+            }
+            return m;
+        }
+
+        public unsafe static Matrix operator *(Matrix m1, double val)
+        {
+            Matrix m = m1.Clone();
+            double* p = m.Data;
+            double* pEnd = p + m.Length;
+            while (p != pEnd)
+            {
+                *p *= val;
+                p++;
+            }
+            return m;
+        }
+
+        public unsafe static Matrix operator *(double val, Matrix m1)
+        {
+            return m1 * val;
+        }
+
+        public unsafe static Matrix operator *(Matrix m1, Matrix m2)
+        {
+            if (m1.ColumnCount != m2.RowCount) throw new ArgumentException("m1 and m2 cann't multiply");
+
+            Matrix m = new Matrix(m1.RowCount, m2.ColumnCount, false);
+            for (int j = 0; j < m2.ColumnCount; j++)
+            {
+                for (int i = 0; i < m1.RowCount; i++)
+                {
+                    double s = 0;
+                    for (int k = 0; k < m1.ColumnCount; k++)
+                    {
+                        s += m1[i, k] * m2[k, j];
+                    }
+
+                    m[i,j] = s;
+                }
+            }
+            return m;
+        }
+
+        #endregion 
+
         #region Dispose
 
         public void Dispose()
