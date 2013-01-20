@@ -93,6 +93,61 @@ namespace Geb.Numerics
             set { Data[index] = value; }
         }
 
+        /// <summary>
+        /// 读取子矩阵或者使用子矩阵赋值。
+        /// </summary>
+        /// <param name="firstRowIdx">子矩阵首行行号</param>
+        /// <param name="lastRowIdx">子矩阵末行行号</param>
+        /// <param name="firstColumnIdx">子矩阵首列列号</param>
+        /// <param name="lastColumnIdx">子矩阵末列列号</param>
+        /// <returns>子矩阵</returns>
+        public unsafe Matrix this[int firstRowIdx, int lastRowIdx, 
+            int firstColumnIdx, int lastColumnIdx]
+        {
+            get
+            {
+                if (firstRowIdx < 0 || lastRowIdx >= this.RowCount || firstRowIdx >= lastRowIdx
+                    || firstColumnIdx < 0 || lastColumnIdx >= this.ColumnCount || firstColumnIdx >= lastColumnIdx)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                // 这里性能可以用指针优化。
+                Matrix m = new Matrix(lastRowIdx - firstRowIdx + 1, lastColumnIdx - firstColumnIdx + 1);
+                for (int r = 0; r < m.RowCount; r++)
+                {
+                    for (int c = 0; c < m.ColumnCount; c++)
+                    {
+                        m[r, c] = this[firstRowIdx + r, firstColumnIdx + c];
+                    }
+                }
+                return m;
+            }
+            set
+            {
+                if (firstRowIdx < 0 || lastRowIdx >= this.RowCount || firstRowIdx >= lastRowIdx
+                    || firstColumnIdx < 0 || lastColumnIdx >= this.ColumnCount || firstColumnIdx >= lastColumnIdx)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                // 这里性能可以用指针优化。
+                Matrix m = value;
+                if (m.RowCount != (lastRowIdx - firstRowIdx + 1) || m.ColumnCount != (lastColumnIdx - firstColumnIdx + 1))
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                for (int r = 0; r < m.RowCount; r++)
+                {
+                    for (int c = 0; c < m.ColumnCount; c++)
+                    {
+                        this[firstRowIdx + r, firstColumnIdx + c] = m[r, c];
+                    }
+                }
+            }
+        }
+
         public unsafe Matrix(double[] data, int rows, int columns)
         {
             if (rows < 1) throw new ArgumentException("rows must > 0");
@@ -196,6 +251,13 @@ namespace Geb.Numerics
                 return m;
             }
 
+            if (_rowCount > _columnCount)
+            {
+                QRDecomposition qr = new QRDecomposition(this);
+                Matrix m = qr.Solve(B);
+                return m;
+            }
+
             throw new InvalidOperationException("Only square supported.");
         }
 
@@ -213,7 +275,6 @@ namespace Geb.Numerics
             }
             return m;
         }
-
 
         #region 操作符重载
 

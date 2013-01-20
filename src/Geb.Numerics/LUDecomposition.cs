@@ -14,6 +14,7 @@ namespace Geb.Numerics
         private readonly int _rowCount;
         private readonly int _columnCount;
         private unsafe int* _pivot;
+        private bool _isNonSingular;
 
         /// <summary>
         /// LU Decomposition
@@ -86,9 +87,11 @@ namespace Geb.Numerics
                     }
                 }
             }
+
+            _isNonSingular = CheckIsNonSingular();
         }
 
-        private bool IsNonSingular()
+        private bool CheckIsNonSingular()
         {
             for (int j = 0; j < _columnCount; j++)
             {
@@ -108,7 +111,7 @@ namespace Geb.Numerics
                 throw new ArgumentException("B");
             }
 
-            if (IsNonSingular() == false)
+            if (_isNonSingular == false)
             {
                 throw new InvalidOperationException("Not Singular Matrix");
             }
