@@ -49,7 +49,12 @@ namespace Geb.Numerics
             get { return _length; }
         }
 
-        public double[,] DataDebug
+        /// <summary>
+        /// 代表当前矩阵数据的二维数组。
+        /// .Net 的 IDE 均不支持直接查看.Net程序中的指针内容，DataSnapshot 提供了调试时查看
+        /// 矩阵数据的唯一途径。请谨慎使用本方法。
+        /// </summary>
+        public double[,] DataSnapshot
         {
             get
             {
