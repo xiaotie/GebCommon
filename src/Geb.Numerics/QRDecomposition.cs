@@ -10,15 +10,17 @@ namespace Geb.Numerics
     {
         private Matrix _QR;
         private Matrix _diag;
+        private Boolean _isFullRank;
+
         private int RowCount
         {
             get { return _QR.RowCount; }
         }
+
         private int ColumnCount
         {
             get { return _QR.ColumnCount; }
         }
-        private Boolean _isFullRank;
 
         public QRDecomposition(Matrix A)
         {
@@ -146,7 +148,6 @@ namespace Geb.Numerics
             return X[0, ColumnCount - 1, 0, nx - 1];
         }
 
-        
         #region Dispose
 
         public void Dispose()
