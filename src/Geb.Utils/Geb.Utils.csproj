@@ -83,7 +83,7 @@
     <Compile Include="L.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="Patch_Csmacro.cs" />
-    <Compile Include="Std..cs" />
+    <Compile Include="Std.cs" />
     <Compile Include="Text\StringHelper.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="Common\Common.cs" />

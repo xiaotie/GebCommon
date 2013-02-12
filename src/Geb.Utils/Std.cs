@@ -9,10 +9,23 @@ namespace Geb.Utils
 
     public struct Std
     {
+        public static unsafe void* Malloc(UInt32 size)
+        {
+            return (void*)Marshal.AllocHGlobal((Int32)size);
+        }
+
         public static unsafe void* Malloc(SizeT size)
         {
             return (void*)Marshal.AllocHGlobal(size);
         }
+
+        public static unsafe void* Malloc(Int32 num, SizeT size)
+        {
+            return (void*)Marshal.AllocHGlobal(num * size);
+        }
+
+        [DllImport("msvcrt.dll", EntryPoint = "memcpy")]
+        public unsafe static extern void Memcpy(void* pDest, void* pSrc, SizeT length);
 
         public static unsafe void Free(void* p)
         {
