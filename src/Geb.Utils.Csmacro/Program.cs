@@ -148,7 +148,7 @@ namespace Geb.Utils.Csmacro
                     {
                         sb.Append(text.Substring(from, item.Index - from));
                         from = item.Index + item.Length;
-                        sb.Append(Csmacro(parrentDirInfo, item.Value));
+                        sb.Append(Csmacro(parrentDirInfo, item.Value).Trim());
                     }
 
                     sb.Append(text.Substring(from, text.Length - from));
