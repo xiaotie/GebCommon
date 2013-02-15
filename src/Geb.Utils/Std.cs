@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -9,6 +10,11 @@ namespace Geb.Utils
 
     public struct Std
     {
+        public static void Assert(bool condition)
+        {
+            Debug.Assert(condition);
+        }
+
         public static unsafe void* Malloc(UInt32 size)
         {
             return (void*)Marshal.AllocHGlobal((Int32)size);

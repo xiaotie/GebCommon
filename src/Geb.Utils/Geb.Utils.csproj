@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Ring.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Common\Compress.cs" />
     <Compile Include="Common\IMetriable.cs" />

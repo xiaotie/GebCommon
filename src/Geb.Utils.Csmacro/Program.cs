@@ -17,7 +17,12 @@ namespace Geb.Utils.Csmacro
         /// Csmacro [dir|filePath]
         /// 
         /// 语法：
-        ///     #region include ""
+        ///     #region include "path"
+        ///     #endregion
+        /// 
+        ///     或
+        /// 
+        ///     #region include "path" [ReplaceWord->Word]
         ///     #endregion
         ///     
         /// </summary>
@@ -152,21 +157,52 @@ namespace Geb.Utils.Csmacro
                     }
 
                     sb.Append(text.Substring(from, text.Length - from));
-
+                    String newTxt = sb.ToString();
+                    Boolean needWrite = true;
                     String newName = fullName.Substring(0, fullName.Length - 3) + "_Csmacro.cs";
                     if (File.Exists(newName))
                     {
-                        Console.WriteLine("[Csmacro]:删除旧文件" + newName);
+                        String oldTxt = File.ReadAllText(newName);
+                        if (oldTxt.Length == newTxt.Length)
+                        {
+                            needWrite = false;
+                            for (int i = 0; i < newTxt.Length; i++)
+                            {
+                                if (oldTxt[i] != newTxt[i]) needWrite = true;
+                            }
+                        }
                     }
-                    File.WriteAllText(newName, sb.ToString());
-                    Console.WriteLine("[Csmacro]:生成文件" + newName);
+
+                    if (needWrite == true)
+                    {
+                        File.WriteAllText(newName, newTxt);
+                        Console.WriteLine("[Csmacro]:生成文件" + newName);
+                    }
                 }
             }
         }
 
         static String Csmacro(DirectoryInfo currentDirInfo, String text)
         {
-            String outfilePath = text.Replace("#region", String.Empty).Replace("#endregion", String.Empty).Replace("include",String.Empty).Replace("\"",String.Empty).Trim();
+            text = text.Replace("#region", String.Empty).Replace("#endregion", String.Empty).Replace("include",String.Empty).Replace("\"",String.Empty).Trim();
+            KeyValuePair<String,String>? pair = null;
+            
+            int idx0 = text.IndexOf("[");
+            if (idx0 > 0)
+            {
+                String tail = text.Substring(idx0);
+                tail = tail.Replace("[", "");
+                tail = tail.Replace("]", "");
+                tail = tail.Trim();
+                String[] words = tail.Split(new String[]{"->"}, StringSplitOptions.RemoveEmptyEntries);
+                if (words.Length == 2)
+                {
+                    pair = new KeyValuePair<string, string>(words[0].Trim(), words[1].Trim());
+                }
+                text = text.Substring(0, idx0).Trim();
+            }
+
+            String outfilePath = text;
             try
             {
                 if (Path.IsPathRooted(outfilePath) == false)
@@ -182,7 +218,11 @@ namespace Geb.Utils.Csmacro
                 }
                 else
                 {
-                    return GetMixinCode(File.ReadAllText(fi.FullName));
+                    text = GetMixinCode(File.ReadAllText(fi.FullName));
+                    if (pair != null)
+                    {
+                        text = text.Replace(pair.Value.Key, pair.Value.Value);
+                    }
                 }
             }
             catch (Exception ex)
