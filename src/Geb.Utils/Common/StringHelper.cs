@@ -48,5 +48,10 @@ namespace Geb.Utils
             if (indexEnd < indexStart) return String.Empty;
             else return txt.Substring(indexStart + startLength, indexEnd - indexStart - startLength);
         }
+
+        public static Boolean IsNullOrEmpty(this String txt)
+        {
+            return String.IsNullOrEmpty(txt);
+        }
 	}
 }

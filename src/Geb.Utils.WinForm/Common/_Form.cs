@@ -215,6 +215,11 @@ namespace Geb.Utils.WinForm
             OpenFile(element, callbackOnFilePath, filter);
         }
 
+        public static void OpenVideoFile(this Form element, Action<String> callbackOnFilePath, String filter = "视频文件|*.avi;*.mp4")
+        {
+            OpenFile(element, callbackOnFilePath, filter);
+        }
+
         public static void OpenDir(this Form element, Action<String> callbackOnDirPath)
         {
             String dirPath;
