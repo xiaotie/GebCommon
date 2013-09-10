@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Geb.Utils.WinForm</RootNamespace>
     <AssemblyName>Geb.Utils.WinForm</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -42,6 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,7 +69,7 @@
     <Compile Include="FrmAddUrl.Designer.cs">
       <DependentUpon>FrmAddUrl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\BitmapHelper.cs" />
+    <Compile Include="Common\_Bitmap.cs" />
     <Compile Include="Common\BaseWebDownloader.cs" />
     <Compile Include="FrmDownload.cs">
       <SubType>Form</SubType>
@@ -81,7 +83,7 @@
     <Compile Include="FrmErrorReport.Designer.cs">
       <DependentUpon>FrmErrorReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\FormClassHelper.cs" />
+    <Compile Include="Common\_Form.cs" />
     <Compile Include="Common\FormConfig.cs" />
     <Compile Include="FrmImageBox.cs">
       <SubType>Form</SubType>

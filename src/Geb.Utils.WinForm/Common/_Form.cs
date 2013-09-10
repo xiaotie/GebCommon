@@ -215,7 +215,7 @@ namespace Geb.Utils.WinForm
             OpenFile(element, callbackOnFilePath, filter);
         }
 
-        public static void OpenVideoFile(this Form element, Action<String> callbackOnFilePath, String filter = "视频文件|*.avi;*.mp4")
+        public static void OpenVideoFile(this Form element, Action<String> callbackOnFilePath, String filter = "视频文件|*.avi;*.mp4;*.flv;*.f4v")
         {
             OpenFile(element, callbackOnFilePath, filter);
         }
@@ -234,5 +234,46 @@ namespace Geb.Utils.WinForm
             }
         }
 
+        private static void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            WorkerContext cxt = e.Argument as WorkerContext;
+            try
+            {
+                cxt.OnStart();
+            }
+            catch (Exception ex)
+            {
+                if (cxt.OnException != null)
+                {
+                    cxt.OnException(ex);
+                }
+            }
+            finally
+            {
+                if (cxt.OnComplete != null)
+                {
+                    cxt.OnComplete();
+                }
+            }
+        }
+
+        private class WorkerContext
+        {
+            public Action OnStart;
+            public Action OnComplete;
+            public Action<Exception> OnException;
+        }
+
+        public static void Start(this BackgroundWorker worker, Action onStart, Action onComplete = null, Action<Exception> onException = null)
+        {
+            worker.DoWork -= Worker_DoWork;
+            worker.DoWork += Worker_DoWork;
+            worker.RunWorkerAsync(new WorkerContext
+            {
+                OnComplete = onComplete,
+                OnStart = onStart,
+                OnException = onException
+            });
+        }
 	}
 }

@@ -1,4 +1,4 @@
-#define NET2
+#define NET4
 
 #if NET2
 

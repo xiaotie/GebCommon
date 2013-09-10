@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Geb.Utils</RootNamespace>
     <AssemblyName>Geb.Utils</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +57,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -72,23 +74,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command.cs" />
     <Compile Include="Collections\Ring.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Common\Compress.cs" />
     <Compile Include="Common\IMetriable.cs" />
     <Compile Include="Common\ExceptionReport.cs" />
-    <Compile Include="Common\MathClassHelper.cs" />
+    <Compile Include="Common\_Math.cs" />
     <Compile Include="Common\MemoryBlock.cs" />
     <Compile Include="Csmacro_Template.cs" />
     <Compile Include="ITypeNickable.cs" />
     <Compile Include="L.cs" />
+    <Compile Include="Others\CSScript.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="Patch_Csmacro.cs" />
     <Compile Include="Std.cs" />
-    <Compile Include="Text\StringHelper.cs" />
+    <Compile Include="Text\_String.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="Common\Common.cs" />
-    <Compile Include="Common\CommonClassHelper.cs" />
+    <Compile Include="Common\_Common.cs" />
     <Compile Include="Common\MessageReceiver.cs" />
     <Compile Include="Common\MessageStub.cs" />
     <Compile Include="Common\ObjectSerializer.cs" />

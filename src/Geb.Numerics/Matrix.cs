@@ -168,6 +168,25 @@ namespace Geb.Numerics
             }
         }
 
+        public unsafe Matrix(double[,] data)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            int rows = data.GetUpperBound(0) + 1;
+            int columns = data.GetUpperBound(1) + 1;
+            
+            _rowCount = rows;
+            _columnCount = columns;
+            _length = _rowCount * _columnCount;
+            Data = (double*)Marshal.AllocHGlobal(_rowCount * _columnCount * sizeof(double));
+            for (int r = 0; r < _rowCount; r++)
+            {
+                for (int c = 0; c < _columnCount; c++)
+                {
+                    this[r, c] = data[r,c];
+                }
+            }
+        }
+
         public unsafe Matrix(int rows, int columns = 1, Boolean fillWidthZero = true)
         {
             if (rows < 1) throw new ArgumentException("rows must > 0");
