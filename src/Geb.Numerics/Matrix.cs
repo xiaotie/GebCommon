@@ -242,6 +242,10 @@ namespace Geb.Numerics
             return m;
         }
 
+        /// <summary>
+        /// 产生一个新的矩阵，新的矩阵是当前矩阵的转置
+        /// </summary>
+        /// <returns>转置矩阵</returns>
         public Matrix Transpose()
         {
             Matrix m = new Matrix(this.ColumnCount, this.RowCount);
@@ -264,7 +268,7 @@ namespace Geb.Numerics
         {
             if (_rowCount == _columnCount)
             {
-                LUDecomposition lu = new LUDecomposition(this);
+                LUD lu = new LUD(this);
                 Matrix m = lu.Solve(B);
                 lu.Dispose();
                 return m;
@@ -272,7 +276,7 @@ namespace Geb.Numerics
 
             if (_rowCount > _columnCount)
             {
-                QRDecomposition qr = new QRDecomposition(this);
+                QRD qr = new QRD(this);
                 Matrix m = qr.Solve(B);
                 return m;
             }

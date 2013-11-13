@@ -8,7 +8,7 @@ namespace Geb.Numerics
     /// <summary>
     /// LU 分解
     /// </summary>
-    public class LUDecomposition : IDisposable
+    public class LUD : IDisposable
     {
         private Matrix _LU;
         private readonly int _rowCount;
@@ -21,7 +21,7 @@ namespace Geb.Numerics
         /// </summary>
         /// <param name="A">矩阵</param>
         /// <returns>矩阵的LU分解</returns>
-        public unsafe LUDecomposition(Matrix A)
+        public unsafe LUD(Matrix A)
         {
             _LU = A.Clone();
             _rowCount = A.RowCount;
@@ -183,7 +183,7 @@ namespace Geb.Numerics
 
         private bool disposed;
 
-        ~LUDecomposition()
+        ~LUD()
         {
             Dispose(false);
         } 

@@ -6,7 +6,7 @@ namespace Geb.Numerics
     /// <summary>
     /// QR 分解。本类未进行测试。
     /// </summary>
-    public class QRDecomposition : IDisposable
+    public class QRD : IDisposable
     {
         private Matrix _QR;
         private Matrix _diag;
@@ -22,7 +22,7 @@ namespace Geb.Numerics
             get { return _QR.ColumnCount; }
         }
 
-        public QRDecomposition(Matrix A)
+        public QRD(Matrix A)
         {
             _QR = A.Clone();
             _diag = new Matrix(ColumnCount);
@@ -168,7 +168,7 @@ namespace Geb.Numerics
 
         private bool disposed;
 
-        ~QRDecomposition()
+        ~QRD()
         {
             Dispose(false);
         } 

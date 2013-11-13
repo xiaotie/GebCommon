@@ -5,89 +5,97 @@ namespace Geb.Utils
 {
     using SizeT = System.Int32;
 
-    public unsafe struct CvMemBlock
+    #region MemoryBlock
+
+    /********************************************************************
+     * 
+     * 这是一个内存管理类，用于管理MemoryStorge。由OpenCV的相关实现修改而来。
+     * 
+     ********************************************************************/
+
+    public unsafe struct MemBlock
     {
-        public CvMemBlock* prev;
-        public CvMemBlock* next;
+        public MemBlock* Prev;
+        public MemBlock* Next;
     }
 
-    public unsafe struct CvMemStorage
+    public unsafe struct MemStorage
     {
-        public int signature;
-        public CvMemBlock* bottom;           /* First allocated block.                   */
-        public CvMemBlock* top;              /* Current memory block - top of the stack. */
-        public CvMemStorage* parent;         /* We get new blocks from parent as needed. */
-        public int block_size;               /* Block size.                              */
-        public int free_space;               /* Remaining free space in current block.   */
+        public int Signature;
+        public int BlockSize;               /* Block size.                              */
+        public int FreeSpace;               /* Remaining free space in current block.   */
+        public MemBlock* Bottom;           /* First allocated block.                   */
+        public MemBlock* Top;              /* Current memory block - top of the stack. */
+        public MemStorage* Parent;         /* We get new blocks from parent as needed. */
     }
 
-    public unsafe struct CvMemStoragePos
+    public unsafe struct MemStoragePos
     {
-        public CvMemBlock* top;
-        public int free_space;
+        public MemBlock* Top;
+        public int FreeSpace;
     }
 
     public unsafe class MemoryBlock
     {
         private int BlockSize;
         private int FreeSpace;
-        private CvMemStorage* storage;
+        private MemStorage* Storage;
 
-        public static void Create(CvMemStorage* storage, int blockSize)
+        public static void Create(MemStorage* storage, int blockSize)
         {
             if (blockSize <= 0) throw new ArgumentException("blockSize must > 0.");
 
             blockSize = Align(blockSize, 8);
-            storage = (CvMemStorage*)Marshal.AllocHGlobal(sizeof(CvMemStorage));
-            storage->block_size = blockSize;
-            Std.Memset(storage, 0, sizeof(CvMemStorage));
+            storage = (MemStorage*)Marshal.AllocHGlobal(sizeof(MemStorage));
+            storage->BlockSize = blockSize;
+            Std.Memset(storage, 0, sizeof(MemStorage));
         }
 
-        public static void cvClearMemStorage(CvMemStorage* storage)
+        public static void ClearMemStorage(MemStorage* storage)
         {
             if (storage == null) return;
 
-            if (storage->parent != null)
-                icvDestroyMemStorage(storage);
+            if (storage->Parent != null)
+                DestroyMemStorage(storage);
             else
             {
-                storage->top = storage->bottom;
-                storage->free_space = (storage->bottom != null) ? storage->block_size - sizeof(CvMemBlock) : 0;
+                storage->Top = storage->Bottom;
+                storage->FreeSpace = (storage->Bottom != null) ? storage->BlockSize - sizeof(MemBlock) : 0;
             }
         }
 
-        public static void icvDestroyMemStorage(CvMemStorage* storage)
+        public static void DestroyMemStorage(MemStorage* storage)
         {
             int k = 0;
 
-            CvMemBlock* block;
-            CvMemBlock* dst_top = null;
+            MemBlock* block;
+            MemBlock* dst_top = null;
 
             if (storage == null) return;
 
-            if (storage->parent != null)
-                dst_top = storage->parent->top;
+            if (storage->Parent != null)
+                dst_top = storage->Parent->Top;
 
-            for (block = storage->bottom; block != null; k++)
+            for (block = storage->Bottom; block != null; k++)
             {
-                CvMemBlock* temp = block;
+                MemBlock* temp = block;
 
-                block = block->next;
-                if (storage->parent != null)
+                block = block->Next;
+                if (storage->Parent != null)
                 {
                     if (dst_top != null)
                     {
-                        temp->prev = dst_top;
-                        temp->next = dst_top->next;
-                        if (temp->next != null)
-                            temp->next->prev = temp;
-                        dst_top = dst_top->next = temp;
+                        temp->Prev = dst_top;
+                        temp->Next = dst_top->Next;
+                        if (temp->Next != null)
+                            temp->Next->Prev = temp;
+                        dst_top = dst_top->Next = temp;
                     }
                     else
                     {
-                        dst_top = storage->parent->bottom = storage->parent->top = temp;
-                        temp->prev = temp->next = null;
-                        storage->free_space = storage->block_size - sizeof(CvMemBlock);
+                        dst_top = storage->Parent->Bottom = storage->Parent->Top = temp;
+                        temp->Prev = temp->Next = null;
+                        storage->FreeSpace = storage->BlockSize - sizeof(MemBlock);
                     }
                 }
                 else
@@ -96,19 +104,19 @@ namespace Geb.Utils
                 }
             }
 
-            storage->top = storage->bottom = null;
-            storage->free_space = 0;
+            storage->Top = storage->Bottom = null;
+            storage->FreeSpace = 0;
         }
 
-        public static void cvReleaseMemStorage(CvMemStorage** storage)
+        public static void ReleaseMemStorage(MemStorage** storage)
         {
             if (storage == null) return;
 
-            CvMemStorage* st = *storage;
+            MemStorage* st = *storage;
             *storage = null;
             if (st != null)
             {
-                icvDestroyMemStorage(st);
+                DestroyMemStorage(st);
                 Marshal.FreeHGlobal((IntPtr)st);
             }
         }
@@ -123,7 +131,7 @@ namespace Geb.Utils
             return size & -align;
         }
 
-        public static void* Alloc(CvMemStorage* storage, int size)
+        public static void* Alloc(MemStorage* storage, int size)
         {
             Byte* ptr = null;
 
@@ -131,27 +139,27 @@ namespace Geb.Utils
 
             if (size > Int32.MaxValue) return null;
 
-            if ((SizeT)storage->free_space < size)
+            if ((SizeT)storage->FreeSpace < size)
             {
-                SizeT max_free_space = AlignLeft(storage->block_size - sizeof(CvMemBlock), 8);
+                SizeT max_free_space = AlignLeft(storage->BlockSize - sizeof(MemBlock), 8);
                 if (max_free_space < size) return null;
 
-                icvGoNextMemBlock(storage);
+                GoNextMemBlock(storage);
             }
 
-            ptr = ((Byte*)(storage)->top + (storage)->block_size - (storage)->free_space);
-            storage->free_space = AlignLeft(storage->free_space - (int)size, 8);
+            ptr = ((Byte*)(storage)->Top + (storage)->BlockSize - (storage)->FreeSpace);
+            storage->FreeSpace = AlignLeft(storage->FreeSpace - (int)size, 8);
 
             return ptr;
         }
 
         /* Remember memory storage position: */
-        public static void cvSaveMemStoragePos(CvMemStorage* storage, CvMemStoragePos* pos)
+        public static void SaveMemStoragePos(MemStorage* storage, MemStoragePos* pos)
         {
             if (storage == null || pos == null) return;
 
-            pos->top = storage->top;
-            pos->free_space = storage->free_space;
+            pos->Top = storage->Top;
+            pos->FreeSpace = storage->FreeSpace;
         }
 
 
@@ -160,19 +168,19 @@ namespace Geb.Utils
         /// </summary>
         /// <param name="storage"></param>
         /// <param name="pos"></param>
-        public static void cvRestoreMemStoragePos(CvMemStorage* storage, CvMemStoragePos* pos)
+        public static void RestoreMemStoragePos(MemStorage* storage, MemStoragePos* pos)
         {
             if (storage == null || pos == null) return;
 
-            if (pos->free_space > storage->block_size) throw new Exception("bad size");
+            if (pos->FreeSpace > storage->BlockSize) throw new Exception("bad size");
 
-            storage->top = pos->top;
-            storage->free_space = pos->free_space;
+            storage->Top = pos->Top;
+            storage->FreeSpace = pos->FreeSpace;
 
-            if (storage->top == null)
+            if (storage->Top == null)
             {
-                storage->top = storage->bottom;
-                storage->free_space = (storage->top != null) ? storage->block_size - sizeof(CvMemBlock) : 0;
+                storage->Top = storage->Bottom;
+                storage->FreeSpace = (storage->Top != null) ? storage->BlockSize - sizeof(MemBlock) : 0;
             }
         }
 
@@ -181,56 +189,59 @@ namespace Geb.Utils
         /// If no blocks, allocate new one and link it to the storage.
         /// </summary>
         /// <param name="storage"></param>
-        public static void icvGoNextMemBlock(CvMemStorage* storage)
+        public static void GoNextMemBlock(MemStorage* storage)
         {
             if (storage == null) return;
 
-            if (storage->top==null || storage->top->next == null)
+            if (storage->Top == null || storage->Top->Next == null)
             {
-                CvMemBlock* block;
+                MemBlock* block;
 
-                if ((storage->parent) == null)
+                if ((storage->Parent) == null)
                 {
-                    block = (CvMemBlock*)Marshal.AllocHGlobal(storage->block_size);
+                    block = (MemBlock*)Marshal.AllocHGlobal(storage->BlockSize);
                 }
                 else
                 {
-                    CvMemStorage* parent = storage->parent;
-                    CvMemStoragePos parent_pos;
-                    
-                    cvSaveMemStoragePos(parent, &parent_pos);
-                    icvGoNextMemBlock(parent);
+                    MemStorage* parent = storage->Parent;
+                    MemStoragePos parent_pos;
 
-                    block = parent->top;
-                    cvRestoreMemStoragePos(parent, &parent_pos);
+                    SaveMemStoragePos(parent, &parent_pos);
+                    GoNextMemBlock(parent);
 
-                    if (block == parent->top)  /* the single allocated block */
+                    block = parent->Top;
+                    RestoreMemStoragePos(parent, &parent_pos);
+
+                    if (block == parent->Top)  /* the single allocated block */
                     {
-                        parent->top = parent->bottom = null;
-                        parent->free_space = 0;
+                        parent->Top = parent->Bottom = null;
+                        parent->FreeSpace = 0;
                     }
                     else
                     {
                         /* cut the block from the parent's list of blocks */
-                        parent->top->next = block->next;
-                        if (block->next != null)
-                            block->next->prev = parent->top;
+                        parent->Top->Next = block->Next;
+                        if (block->Next != null)
+                            block->Next->Prev = parent->Top;
                     }
                 }
 
                 /* link block */
-                block->next = null;
-                block->prev = storage->top;
+                block->Next = null;
+                block->Prev = storage->Top;
 
-                if (storage->top != null)
-                    storage->top->next = block;
+                if (storage->Top != null)
+                    storage->Top->Next = block;
                 else
-                    storage->top = storage->bottom = block;
+                    storage->Top = storage->Bottom = block;
             }
 
-            if (storage->top->next != null)
-                storage->top = storage->top->next;
-            storage->free_space = storage->block_size - sizeof(CvMemBlock);
+            if (storage->Top->Next != null)
+                storage->Top = storage->Top->Next;
+            storage->FreeSpace = storage->BlockSize - sizeof(MemBlock);
         }
     }
+
+    
+    #endregion
 }
