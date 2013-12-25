@@ -57,7 +57,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -108,6 +108,7 @@
     <Compile Include="Collections\SearchableSortableBindingList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\StringHelper.cs" />
+    <Compile Include="Common\Validator.cs" />
     <Compile Include="Win32\Win32Helper.cs" />
     <Compile Include="Win32\Window.cs" />
   </ItemGroup>
