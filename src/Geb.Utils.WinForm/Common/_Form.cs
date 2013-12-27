@@ -19,7 +19,7 @@ namespace Geb.Utils.WinForm
 
 		public void Invoke0()
 		{
-			if (Control.IsHandleCreated == true)
+            if (Control.IsHandleCreated == true && Control.IsDisposed == false)
 			{
                 try
                 {
@@ -33,7 +33,7 @@ namespace Geb.Utils.WinForm
 
 		public void Invoke1<T>(T obj)
 		{
-			if (Control.IsHandleCreated == true)
+			if (Control.IsHandleCreated == true && Control.IsDisposed == false)
 			{
                 try
                 {
@@ -47,7 +47,7 @@ namespace Geb.Utils.WinForm
 
 		public void Invoke2<T0,T1>(T0 obj0, T1 obj1)
 		{
-			if (Control.IsHandleCreated == true)
+            if (Control.IsHandleCreated == true && Control.IsDisposed == false)
 			{
                 try
                 {
@@ -86,8 +86,14 @@ namespace Geb.Utils.WinForm
 		{
 			if (ctl.IsHandleCreated == true)
 			{
-				ControlFuncContext fc = new ControlFuncContext(ctl, action);
-                ctl.Invoke(new Action(fc.Invoke0));
+                try
+                {
+                    ControlFuncContext fc = new ControlFuncContext(ctl, action);
+                    ctl.Invoke(new Action(fc.Invoke0));
+                }
+                catch (ObjectDisposedException)
+                {
+                }
 			}
 		}
 
@@ -95,8 +101,14 @@ namespace Geb.Utils.WinForm
 		{
 			if (ctl.IsHandleCreated == true)
 			{
-				ControlFuncContext fc = new ControlFuncContext(ctl, action);
-                ctl.Invoke(new Action<T>(fc.Invoke1<T>), obj);
+                try
+                {
+                    ControlFuncContext fc = new ControlFuncContext(ctl, action);
+                    ctl.Invoke(new Action<T>(fc.Invoke1<T>), obj);
+                }
+                catch (ObjectDisposedException)
+                {
+                }
 			}
 		}
 
@@ -104,8 +116,14 @@ namespace Geb.Utils.WinForm
 		{
 			if (ctl.IsHandleCreated == true)
 			{
-				ControlFuncContext fc = new ControlFuncContext(ctl, action);
-                ctl.Invoke(new Action<T0, T1>(fc.Invoke2<T0, T1>), obj0, obj1);
+                try
+                {
+                    ControlFuncContext fc = new ControlFuncContext(ctl, action);
+                    ctl.Invoke(new Action<T0, T1>(fc.Invoke2<T0, T1>), obj0, obj1);
+                }
+                catch (ObjectDisposedException)
+                {
+                }
 			}
 		}
 
