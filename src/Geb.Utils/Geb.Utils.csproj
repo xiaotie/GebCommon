@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Geb.Utils</RootNamespace>
     <AssemblyName>Geb.Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -78,6 +78,7 @@
     <Compile Include="Collections\Ring.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Common\Compress.cs" />
+    <Compile Include="Common\ConvertHelper.cs" />
     <Compile Include="Common\IMetriable.cs" />
     <Compile Include="Common\ExceptionReport.cs" />
     <Compile Include="Common\_Math.cs" />

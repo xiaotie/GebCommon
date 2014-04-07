@@ -78,8 +78,11 @@ namespace Geb.Utils.WinForm
 		public static void EnableControls(this Control ctl, Boolean status)
 		{
 			ctl.Enabled = status;
-			foreach (Control c in ctl.Controls)
-				c.Enabled = status;
+            foreach (Control c in ctl.Controls)
+            {
+                if (c is Label) continue;
+                c.Enabled = status;
+            }
 		}
 
 		public static void InvokeAction(this Control ctl, Action action)
@@ -215,17 +218,22 @@ namespace Geb.Utils.WinForm
 
         public static void OpenFile(this Form element, Action<String> callbackOnFilePath, String filter = "所有文件|*.*")
         {
-            String filePath;
+            String filePath= null;
             OpenFileDialog dlg = new OpenFileDialog();
 
             dlg.Filter = filter;
             dlg.FileOk += (object sender, CancelEventArgs e) =>
             {
                 filePath = dlg.FileName;
+            };
+
+            dlg.ShowDialog();
+
+            if (filePath != null)
+            {
                 if (callbackOnFilePath != null)
                     callbackOnFilePath(filePath);
-            };
-            dlg.ShowDialog();
+            }
         }
 
         public static void OpenImageFile(this Form element, Action<String> callbackOnFilePath, String filter = "图像文件|*.bmp;*.jpg;*.gif;*.png")
