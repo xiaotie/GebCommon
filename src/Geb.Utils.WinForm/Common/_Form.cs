@@ -6,7 +6,11 @@ using System.Text;
 
 namespace Geb.Utils.WinForm
 {
-	public class ControlFuncContext
+    public delegate void Action();
+    public delegate void Action<T>(T t);
+    public delegate void Action<T0,T1>(T0 t0,T1 t1);
+
+    public class ControlFuncContext
 	{
 		public Control Control { get; private set; }
 		public Delegate Delegate { get; private set; }

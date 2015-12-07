@@ -8,3 +8,5 @@ Release
 /Geb.Common.v11.suo
 *.suo
 /TestResults
+*.DS_Store
+*.pfx
