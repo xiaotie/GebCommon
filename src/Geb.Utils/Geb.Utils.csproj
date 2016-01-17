@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Collections\Ring.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
