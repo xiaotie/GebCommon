@@ -56,7 +56,7 @@
     <AssemblyOriginatorKeyFile>geb_image.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ImageBox.cs" />
+    <Compile Include="Common\ScrollBarSkin.cs" />
     <Compile Include="FrmAddUrl.cs">
       <SubType>Form</SubType>
     </Compile>
