@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Reflection;
 
@@ -715,29 +716,49 @@ namespace Geb.Utils.WinForm
     {
         public Color BackgroundColor { get; set; }
         public Color ScrollBarColor { get; set; }
+        public Color HighlightScrollBarColor { get; set; }
         public Color ArrowColor { get; set; }
 
         public ColorSccrollBarSkin(IntPtr hWnd) : base(hWnd)
         {
-            BackgroundColor = Color.FromArgb(0x33, 0x33, 0x33);
-            ScrollBarColor = Color.Red;
+            BackgroundColor = Color.FromArgb(0x3E, 0x3E, 0x3E);
+            ScrollBarColor = Color.FromArgb(0x68, 0x68, 0x68);
+            HighlightScrollBarColor = Color.FromArgb(168, 168, 168);
             ArrowColor = Color.FromArgb(0x99, 0x99, 0x99);
+
         }
 
         protected override void DrawVerticalScrollBar(Graphics g, int scrollBarWidth, int scrollBarHeight, int thumbTop, int thumbBottom, int arrowSize, bool isMouseOver, bool isClick)
         {
+            Color thumbColor = (isMouseOver == true || isClick == true) ? HighlightScrollBarColor : ScrollBarColor;
+            int margin = scrollBarWidth > 12 ? 4 : 0;
+            int realArrowSize = arrowSize - margin * 2;
+            float offset = realArrowSize / 3.0f;
+
+
             using (Brush bgBrush = new SolidBrush(BackgroundColor))
-            using (Brush brush = new SolidBrush(ScrollBarColor))
+            using (Brush brush = new SolidBrush(thumbColor))
             using (Brush arrowBrush = new SolidBrush(ArrowColor))
             {
                 g.FillRectangle(bgBrush, new Rectangle(0, 0, scrollBarWidth, scrollBarHeight));
-                g.FillRectangle(brush, new Rectangle(0, thumbTop, scrollBarWidth, thumbBottom - thumbTop));
-                if (isMouseOver == true || isClick == true)
-                {
-                    g.FillRectangle(arrowBrush, new Rectangle(0, 0, scrollBarWidth, arrowSize));
-                    g.FillRectangle(arrowBrush, new Rectangle(0, scrollBarHeight - arrowSize, scrollBarWidth, scrollBarWidth));
-                }
+                g.FillRectangle(brush, new Rectangle(margin, thumbTop, scrollBarWidth - margin * 2, thumbBottom - thumbTop));
+                FillPath(g, new PointF(margin-1, margin + realArrowSize - offset), 
+                    new PointF(margin + realArrowSize, margin + realArrowSize - offset), new PointF(margin + realArrowSize/2.0f - 0.5f, margin), arrowBrush);
+                FillPath(g, new PointF(margin - 1, scrollBarHeight - arrowSize + margin + offset),
+                    new PointF(margin + realArrowSize, scrollBarHeight - arrowSize + margin + offset), new PointF(margin + realArrowSize / 2.0f - 0.5f, scrollBarHeight - margin), arrowBrush);
             }
+        }
+
+        protected void FillPath(Graphics g, PointF p0, PointF p1, PointF p2, Brush brush)
+        {
+            SmoothingMode oldMode = g.SmoothingMode;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            GraphicsPath path = new GraphicsPath();
+            path.AddLine(p0, p1);
+            path.AddLine(p1, p2);
+            path.AddLine(p2, p0);
+            g.FillPath(brush, path);
+            g.SmoothingMode = oldMode;
         }
 
         protected override void DrawSizer(Graphics g, int sizerWidth, int sizerHeight)

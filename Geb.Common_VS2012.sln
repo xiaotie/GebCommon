@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Utils", "src\Geb.Utils\Geb.Utils.csproj", "{9771C724-359F-46FE-8FD0-7896353537AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Utils.Csmacro", "src\Geb.Utils.Csmacro\Geb.Utils.Csmacro.csproj", "{9D56A245-1A85-48CD-9B1E-1C6AC6365F22}"
@@ -22,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Numerics.Test", "src\Geb.Numerics.Test\Geb.Numerics.Test.csproj", "{41516D8E-9C43-4460-9090-C7C90C2EE901}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Cloud.Utils", "src\Geb.Cloud.Utils\Geb.Cloud.Utils.csproj", "{8E2384D8-AD12-4DB7-96B7-1F8ED82849D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Utils.WinForm.Demo", "src\Geb.Utils.WinForm.Demo\Geb.Utils.WinForm.Demo.csproj", "{B7F90A7D-DCFC-4E75-A88E-3D985C0F6D67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,10 @@ Global
 		{8E2384D8-AD12-4DB7-96B7-1F8ED82849D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E2384D8-AD12-4DB7-96B7-1F8ED82849D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E2384D8-AD12-4DB7-96B7-1F8ED82849D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F90A7D-DCFC-4E75-A88E-3D985C0F6D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F90A7D-DCFC-4E75-A88E-3D985C0F6D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F90A7D-DCFC-4E75-A88E-3D985C0F6D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F90A7D-DCFC-4E75-A88E-3D985C0F6D67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
