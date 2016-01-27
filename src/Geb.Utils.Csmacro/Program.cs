@@ -52,7 +52,7 @@ namespace Geb.Utils.Csmacro
             Console.WriteLine("file:" + fileName);
 #endif
 
-            if (String.IsNullOrEmpty(fileName))
+            if (!String.IsNullOrEmpty(fileName))
             {
                 Csmacro(new DirectoryInfo(dirName));
             }
@@ -111,10 +111,18 @@ namespace Geb.Utils.Csmacro
                     switch (word)
                     {
                         case "v2.0":
-                            sb.AppendLine("#define NET2");
+                            sb.AppendLine("#define NET20");
+                            break;
+                        case "v2.5":
+                            sb.AppendLine("#define NET25");
+                            break;
+                        case "v3.0":
+                            sb.AppendLine("#define NET30");
+                            break;
+                        case "v3.5":
                             break;
                         case "v4.0":
-                            sb.AppendLine("#define NET4");
+                            sb.AppendLine("#define NET40");
                             break;
                     }
                     String path = di.FullName + "\\Csmacro_Template.cs";

@@ -1,6 +1,6 @@
-#define NET2
+#define NET20
 
-#if NET2
+#if NET20
 
 namespace System.Runtime.CompilerServices
 {
