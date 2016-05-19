@@ -113,15 +113,18 @@ namespace Geb.Utils.Csmacro
                         case "v2.0":
                             sb.AppendLine("#define NET20");
                             break;
-                        case "v2.5":
-                            sb.AppendLine("#define NET25");
-                            break;
                         case "v3.0":
                             sb.AppendLine("#define NET30");
                             break;
                         case "v3.5":
                             break;
                         case "v4.0":
+                            sb.AppendLine("#define NET40");
+                            break;
+                        case "v4.1":
+                            sb.AppendLine("#define NET41");
+                            break;
+                        default:
                             sb.AppendLine("#define NET40");
                             break;
                     }
