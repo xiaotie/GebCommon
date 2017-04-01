@@ -56,7 +56,7 @@
     <AssemblyOriginatorKeyFile>geb_image.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -96,8 +96,6 @@
     <Compile Include="FrmImageBox.Designer.cs">
       <DependentUpon>FrmImageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mediator\CategoryItemSelectorMediator.cs" />
-    <Compile Include="Mediator\WinformPagerMediator.cs" />
     <Compile Include="Media\Camera.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -167,13 +165,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="geb_image.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Geb.Patch\Geb.Patch.csproj">
+      <Project>{61a164f6-cbf8-4979-a8b3-de3c6f513f4c}</Project>
+      <Name>Geb.Patch</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Geb.Utils\Geb.Utils.csproj">
-      <Project>{9771C724-359F-46FE-8FD0-7896353537AF}</Project>
+      <Project>{9771c724-359f-46fe-8fd0-7896353537af}</Project>
       <Name>Geb.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="geb_image.pfx" />
+    <Folder Include="Mediator\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
