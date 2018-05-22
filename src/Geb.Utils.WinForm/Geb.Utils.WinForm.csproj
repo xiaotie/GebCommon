@@ -168,10 +168,6 @@
     <None Include="geb_image.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Geb.Patch\Geb.Patch.csproj">
-      <Project>{61a164f6-cbf8-4979-a8b3-de3c6f513f4c}</Project>
-      <Name>Geb.Patch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Geb.Utils\Geb.Utils.csproj">
       <Project>{9771c724-359f-46fe-8fd0-7896353537af}</Project>
       <Name>Geb.Utils</Name>
