@@ -10,3 +10,4 @@ old
 /TestResults
 *.DS_Store
 *.pfx
+.vs/
