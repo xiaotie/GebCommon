@@ -11,3 +11,6 @@ old
 *.DS_Store
 *.pfx
 .vs/
+obj
+publish
+

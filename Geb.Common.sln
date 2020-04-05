@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Utils.Csmacro", "src\Geb.Utils.Csmacro\Geb.Utils.Csmacro.csproj", "{E0DB0803-DE18-46F8-A6FC-703EED3DE521}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geb.Utils.Csmacro", "src\Geb.Utils.Csmacro\Geb.Utils.Csmacro.csproj", "{E0DB0803-DE18-46F8-A6FC-703EED3DE521}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Utils", "src\Geb.Utils\Geb.Utils.csproj", "{7F0D810B-237F-46EC-8A99-227FAC4574BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geb.Utils", "src\Geb.Utils\Geb.Utils.csproj", "{7F0D810B-237F-46EC-8A99-227FAC4574BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geb.Util.Collections", "src\Geb.Util.Collections\Geb.Util.Collections.csproj", "{616E9A27-B439-4763-8C62-631B9E3703F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7F0D810B-237F-46EC-8A99-227FAC4574BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F0D810B-237F-46EC-8A99-227FAC4574BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F0D810B-237F-46EC-8A99-227FAC4574BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{616E9A27-B439-4763-8C62-631B9E3703F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616E9A27-B439-4763-8C62-631B9E3703F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616E9A27-B439-4763-8C62-631B9E3703F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616E9A27-B439-4763-8C62-631B9E3703F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -37,7 +37,7 @@ namespace Geb.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <param name="number"></param>
-        public static void RandomSampleSplitInPlace<T>(this IList<T> data, int number)
+        public static void Shuffle<T>(this IList<T> data, int number)
         {
             int count = data.Count;
             if (number < 1 || number >= count) return;
@@ -79,7 +79,7 @@ namespace Geb.Utils
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
-        public static void RandomPermute<T>(this IList<T> data)
+        public static void Shuffle<T>(this IList<T> data)
         {
             int count = data.Count;
             for (int i = 0; i < count; i++)

@@ -16,7 +16,7 @@ namespace Geb.Utils.Csmacro
         /// <summary>
         /// Csmacro [dir|filePath]
         /// 
-        /// 语法：
+        /// include 语法：
         ///     #region include "path"
         ///     #endregion
         /// 
@@ -24,7 +24,16 @@ namespace Geb.Utils.Csmacro
         /// 
         ///     #region include "path" [ReplaceWord->Word]
         ///     #endregion
+        /// 
+        /// mixin 语法：
+        /// 
+        ///     #region mixin
+        ///     ...
+        ///     #endregion
         ///     
+        /// replace 语法:
+        ///     #region replace xxx -> yyy
+        ///     #endregion
         /// </summary>
         /// <param name="args"></param>
         static void
